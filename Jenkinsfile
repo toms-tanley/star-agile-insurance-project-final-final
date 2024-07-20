@@ -17,9 +17,8 @@ pipeline {
         stage('Code Test') {
             steps {
                 script {
-                   sh 'mvn test' 
+                    sh 'mvn test'
                 }
-                
             }
         }
 
@@ -52,12 +51,6 @@ pipeline {
                 sh 'docker tag insurance123 thomasdevops003/insurance123'
                 sh 'docker push thomasdevops003/insurance123'
                 sh 'docker rmi -f $(docker images -aq)' // Cleaning up the Image
-            }
-        }
-
-        stage('Deployment using Ansible') {
-            steps {
-                ansiblePlaybook become: true, credentialsId: 'ansible-ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansiblefile'
             }
         }
     }
