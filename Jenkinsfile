@@ -25,13 +25,13 @@ pipeline {
 
         stage('Docker Image Build') {
             steps {
-                sh 'docker build -t insurance12:v6 .' // Build Docker image
+                sh 'docker build -t insurance12 .' // Build Docker image
             }
         }
 
         stage('Deploy to the Test Server') {
             steps {
-                sh 'docker run -d -p 8082:8081 insurance12:v6' // Run Docker container
+                sh 'docker run -d -p 8082:8081 insurance12' // Run Docker container
                 echo "Application is successfully running"
                 sh 'docker rm -f $(docker ps -a -q)' // Stopping the Running Docker container
             }
@@ -49,6 +49,7 @@ pipeline {
         stage('Push Docker Image to Hub') {
             steps {
                 echo 'Push a Docker Image'
+                sh 'docker tag insurance12 thomasdevops003/insure:v6'
                 sh 'docker push thomasdevops003/insure:v6'
                 sh 'docker rmi -f $(docker images -aq)' // Cleaning up the Image
             }
