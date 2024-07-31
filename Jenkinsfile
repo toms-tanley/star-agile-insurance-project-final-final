@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git 'https://github.com/toms-tanley/star-agile-insurance-project-final-final.git'
+                git 'https://github.com/toms-tanley/Insurance-Project-star.git'
             }
         }
 
@@ -17,8 +17,15 @@ pipeline {
         stage('Code Test') {
             steps {
                 script {
-                    sh 'mvn test' // Run the tests
+                   sh 'mvn test' 
                 }
+                
+            }
+        }
+
+        stage('Docker Image Build') {
+            steps {
+                sh 'docker build -t insurance12:v6 .' // Build Docker image
             }
         }
     }
