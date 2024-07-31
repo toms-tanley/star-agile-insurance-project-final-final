@@ -28,5 +28,31 @@ pipeline {
                 sh 'docker build -t insurance12:v6 .' // Build Docker image
             }
         }
+
+        stage('Deploy to the Test Server') {
+            steps {
+                sh 'docker run -d -p 8082:8081 insurance12:v6' // Run Docker container
+                echo "Application is successfully running"
+                sh 'docker rm -f $(docker ps -a -q)' // Stopping the Running Docker container
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                echo 'Docker Login'
+                withCredentials([usernamePassword(credentialsId: 'Dockerlogin', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                }
+            }
+        }
+
+        stage('Push Docker Image to Hub') {
+            steps {
+                echo 'Push a Docker Image'
+                sh 'docker tag insurance12 thomasdevops003/insurance12'
+                sh 'docker push thomasdevops003/insure'
+                sh 'docker rmi -f $(docker images -aq)' // Cleaning up the Image
+            }
+        }
     }
 }
