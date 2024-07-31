@@ -31,7 +31,7 @@ pipeline {
 
         stage('Deploy to the Test Server') {
             steps {
-                sh 'docker run -d -p 8082:8081 insurance12' // Run Docker container
+                sh 'docker run -d -p 8084:8083 insurance12' // Run Docker container
                 echo "Application is successfully running"
                 sh 'docker rm -f $(docker ps -a -q)' // Stopping the Running Docker container
             }
